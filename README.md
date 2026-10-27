@@ -2,8 +2,11 @@
 [![Arduino CI](https://github.com/RobTillaart/ADS7142/workflows/Arduino%20CI/badge.svg)](https://github.com/marketplace/actions/arduino_ci)
 [![Arduino-lint](https://github.com/RobTillaart/ADS7142/actions/workflows/arduino-lint.yml/badge.svg)](https://github.com/RobTillaart/ADS7142/actions/workflows/arduino-lint.yml)
 [![JSON check](https://github.com/RobTillaart/ADS7142/actions/workflows/jsoncheck.yml/badge.svg)](https://github.com/RobTillaart/ADS7142/actions/workflows/jsoncheck.yml)
+[![GitHub issues](https://img.shields.io/github/issues/RobTillaart/ADS7142.svg)](https://github.com/RobTillaart/ADS7142/issues)
+
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/RobTillaart/ADS7142/blob/master/LICENSE)
 [![GitHub release](https://img.shields.io/github/release/RobTillaart/ADS7142.svg?maxAge=3600)](https://github.com/RobTillaart/ADS7142/releases)
+[![PlatformIO Registry](https://badges.registry.platformio.org/packages/robtillaart/library/ADS7142.svg)](https://registry.platformio.org/libraries/robtillaart/ADS7142)
 
 
 # ADS7142
