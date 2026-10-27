@@ -1,0 +1,23 @@
+{
+  "name": "ADS7142",
+  "keywords": "ADS7142, ADS7142-Q1",
+  "description": "Arduino library for I2C ADS7124 2-Channel ADC Programmable Sensor Monitor.",
+  "authors":
+  [
+    {
+      "name": "Rob Tillaart",
+      "email": "Rob.Tillaart@gmail.com",
+      "maintainer": true
+    }
+  ],
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/RobTillaart/ADS7142.git"
+  },
+  "version": "0.1.0",
+  "license": "MIT",
+  "frameworks": "Arduino",
+  "platforms": "*",
+  "headers": "ADS7142.h"
+}
