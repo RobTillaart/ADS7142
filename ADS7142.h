@@ -142,7 +142,7 @@ public:
   uint8_t  getBusy();                      //  read busy pin
 
   //  ERROR HANDLING
-  int      lastError();
+  int      getLastError();
 
 
 

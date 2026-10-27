@@ -14,7 +14,6 @@
 Arduino library for I2C ADS7142 2-Channel ADC Programmable Sensor Monitor
 
 
-
 ## Description
 
 **Experimental**
@@ -49,6 +48,7 @@ The Q1 is automotive certified.
 
 - https://nl.mouser.com/en/new/mikroe/mikroe-adc-16-click/
 - https://nl.mouser.com/en/new/texas-instruments/ti-ads7142-sensor-monitors/
+
 
 ## Hardware
 
@@ -103,36 +103,148 @@ too if they are behind the multiplexer.
 
 ## Interface
 
+```
+#include "ADS7142.h"
+```
+
 ### Constructor
 
-- **ADS7142(const uint8_t deviceAddress = 0x20, TwoWire \*wire = &Wire)** constructor
-- **bool begin(int sda, int scl)**
+- **ADS7142(const uint8_t deviceAddress = 0x18, TwoWire \*wire = &Wire)** constructor
 - **bool begin()**
 - **bool isConnected()**
 - **uint8_t getAddress()**
+
+### Reset and calibration
+
+Page 44.
+
 - **void reset()**
+- **void triggerOffsetCalibration()**
+
+### Operation mode
+
+Page 45.
+
+- **void setManualChannel0()**
+- **void setManualAutoSequencing()**
+- **void setAutoMonitoringAutoSequencing()**
+- **void setHighPrecision()**
+- **uint8_t getOperationMode()**
+- **bool getI2CHighSpeedMode()**
+
+### Input configuration
+
+Page 46
+
+- **void setTwoChannelSingleEnded()**
+- **void setOneChannelSingleEnded()**
+- **void setOneChannelPseudoDifferential()**
+- **uint8_t getChannelConfig()**
+  
+### Auto sequence channel enable
+
+Page 47,48
+
+- **void setAutoSequenceChannel(uint8_t channel, bool enable)**
+- **bool getAutoSequenceChannel(uint8_t channel)**
+- **void startSequence()**
+- **void stopSequence()**
+- **uint8_t getSequenceStatus()**
+
+### Oscillator and timing
+
+Page 49
+
+- **void setOscillatorClock(uint8_t osc, uint8_t clk)**
+- **uint8_t getOscillator()**
+- **uint8_t getClockSelect()**  returns 18..255
+
+### Data buffer control
+
+Page 50,51
+
+- **void setDataBufferMode(uint8_t mode)** mode = {0,1,4,6}
+- **uint8_t  getDataBufferMode()**
+- **void     setDataFormat(uint8_t format)** format = {0,1,2,3}
+- **uint8_t  getDataFormat()**
+- **uint8_t  getDataBufferCount()** returns 0..16
+
+### Accumulator control
+
+Page 52,53
+
+- **void setAccumulatorEnable(bool enable)**
+- **bool getAccumulatorEnable()**
+- **uint16_t getAccumulatorChannel0()**
+- **uint16_t getAccumulatorChannel1()**
+- **uint8_t getAccumulatorCount()**
+
+### Digital Window Comparator (DWC)
+
+Page 54..59
+
+- **void setDWCEnable(bool enable)**
+- **bool getDWCEnable()**
+- **void setAlertChannel(uint8_t channel, bool enable)**
+- **bool getAlertChannel(uint8_t channel)**
+
+Page 54..57
+- **void setDWCThresholdHigh(uint8_t channel, uint16_t th)**
+- **uint16_t getDWCThresholdHigh(uint8_t channel)**
+- **void setDWCThresholdLow(uint8_t channel, uint16_t th)**
+- **uint16_t getDWCThresholdLow(uint8_t channel)**
+- **void setDWXHysteresis(uint8_t channel, uint8_t hysteresis)**
+- **uint8_t getDWXHysteresis(uint8_t channel)**
+
+Page 58,59
+- **void setMaxEventCount(uint8_t count)**
+- **uint8_t getMaxEventCount()**
+- **uint8_t getAlertTriggerChannel()**
+- **void clearAlertLow(uint8_t channel)**
+- **uint8_t getAlertLow()**
+- **void clearAlertHigh(uint8_t channel)**
+- **uint8_t getAlertHigh()**
 
 
+### ALERT and BUSY
 
+Pins for polling the ADS7142 **ALERT** and **BUSY** pins.
+If not set these pins cannot be read.
+
+- **uint8_t setAlert(uint8_t alertPin)**
+- **uint8_t getAlert()**
+- **uint8_t setBusy(uint8_t busyPin)**
+- **uint8_t getBusy()**
+
+## Error
+
+- **int getLastError()**
+  
+|  Value  |  Description        |  Notes  |
+|:-------:|:--------------------|:--------|
+|  0      |  ADS7142_OK         |
+|  -100   |  ADS7142_ERROR      | generic indicator
 
 
 ## Future
 
 #### Must
 
-- improve documentation.
-- buy hardware ADS7142.
-- test with hardware.
-- add examples.
+- improve documentation. (a lot).
+- elaborate API
+- add datasheet to repo
+- buy and test with hardware ADS7142.
 
 #### Should 
 
-- are there compatible IC's that this library can support?
-  - identical or similar interface?
-- unit test if possible
-
+- add examples.
+- improve error handling
 
 #### Could
+
+- unit test if possible
+- are there compatible IC's that this library can support?
+  - identical or similar interface?
 
 
 #### Won't

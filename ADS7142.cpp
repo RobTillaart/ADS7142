@@ -523,6 +523,18 @@ uint8_t ADS7142::getBusy()
 
 /////////////////////////////////////////////
 //
+//  ERROR HANDLING
+//
+int ADS7142::getLastError()
+{
+  int e = _error;
+  _error = ADS7142_OK;
+  return e;
+}
+
+
+/////////////////////////////////////////////
+//
 //  LOW LEVEL REGISTER
 //
 int ADS7142::readRegister(uint8_t reg)
