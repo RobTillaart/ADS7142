@@ -1,0 +1,17 @@
+# Syntax Colouring Map For ADS7142
+
+# Data types (KEYWORD1)
+ADS7142	KEYWORD1
+
+
+# Methods and Functions (KEYWORD2)
+begin	KEYWORD2
+isConnected
+getAddress
+
+# TODO
+
+# Constants (LITERAL1)
+ADS7142_LIB_VERSION	LITERAL1
+
+
