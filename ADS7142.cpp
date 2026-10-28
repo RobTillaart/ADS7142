@@ -15,7 +15,6 @@ ADS7142::ADS7142(const uint8_t deviceAddress, TwoWire *wire)
   _address  = deviceAddress;
   _wire     = wire;
   _error    = ADS7142_OK;
-  _mode     = 0;
   _alertPin = 255;
   _busyPin  = 255;
 }
@@ -48,7 +47,6 @@ void ADS7142::reset()
   writeRegister(ADS7142_DEVICE_RESET, 0x01);
   //  TODO reset state...
   _error    = ADS7142_OK;
-  _mode     = 0;
 }
 
 void ADS7142::triggerOffsetCalibration()
@@ -56,6 +54,30 @@ void ADS7142::triggerOffsetCalibration()
   writeRegister(ADS7142_OFFSET_CAL, 0x01);
 }
 
+
+/////////////////////////////////////////////
+//
+//  READ Page 24
+//
+uint16_t ADS7142::read()
+{
+  return readData2();
+}
+
+uint8_t ADS7142::read(uint16_t data[], uint8_t size)
+{
+  if (size == 0) return 0;
+  uint8_t n = getDataBufferCount();
+  if (size < n) n = size;
+  //  TODO test
+  //  fetch data per measurement if possible
+  //  optimize later
+  for (uint8_t i = 0; i < n; i++)
+  {
+    data[i] = readData2();
+  }
+  return n;
+}
 
 /////////////////////////////////////////////
 //
@@ -175,7 +197,7 @@ uint8_t ADS7142::getSequenceStatus()
 //
 //  OSCILLATOR and TIMING CONTROL REGISTERS page 49
 //
-void ADS7142::setOscillatorClock(uint8_t osc, uint8_t clk)
+void ADS7142::setOscillatorClock(uint8_t osc, uint8_t clock)
 {
   if (osc > 1)
   {
@@ -183,7 +205,7 @@ void ADS7142::setOscillatorClock(uint8_t osc, uint8_t clk)
     return;
   }
   writeRegister(ADS7142_OSC_SEL, osc);
-  uint8_t data = clk;
+  uint8_t data = clock;
   if ((osc == 0) && (data < 21)) data = 21;   //  OSC == HIGH
   if ((osc == 1) && (data < 18)) data = 18;   //  OSC == LOW
   writeRegister(ADS7142_nCLK_SEL, data);
@@ -502,10 +524,10 @@ void ADS7142::setAlertPin(uint8_t alertPin)
   pinMode(_alertPin, INPUT_PULLUP);
 }
 
-uint8_t ADS7142::getAlert()
+bool ADS7142::hasAlert()
 {
-  if (_alertPin == 255) return HIGH;
-  return digitalRead(_alertPin);
+  if (_alertPin == 255) return false;
+  return digitalRead(_alertPin) == LOW;
 }
 
 void ADS7142::setBusyPin(uint8_t busyPin)
@@ -514,10 +536,10 @@ void ADS7142::setBusyPin(uint8_t busyPin)
   pinMode(_busyPin, INPUT_PULLUP);
 }
 
-uint8_t ADS7142::getBusy()
+bool ADS7142::isBusy()
 {
-  if (_busyPin == 255) return HIGH;
-  return digitalRead(_busyPin);
+  if (_busyPin == 255) return false;
+  return digitalRead(_busyPin) == LOW;
 }
 
 
@@ -548,7 +570,7 @@ int ADS7142::readRegister(uint8_t reg)
     return _wire->read();
   }
   //  TODO handle error
-  return -100;
+  return ADS7142_ERROR;
 }
 
 
@@ -560,6 +582,33 @@ int ADS7142::writeRegister(uint8_t reg, uint8_t value)
   _error = _wire->endTransmission();
   return _error;
 }
+
+
+uint16_t ADS7142::readData2()
+{
+  if (_wire->requestFrom(_address, (uint8_t)2) == 2)
+  {
+    uint16_t data = _wire->read() << 8;
+    data |= _wire->read();
+    return data;
+  }
+  //  TODO handle error
+  return -100;
+}
+
+
+uint16_t ADS7142::readData2()
+{
+  if (_wire->requestFrom(_address, (uint8_t)2) == 2)
+  {
+    uint16_t data = _wire->read() << 8;
+    data |= _wire->read();
+    return data;
+  }
+  //  TODO handle error
+  return -100;
+}
+
 
 
 //  -- END OF FILE --

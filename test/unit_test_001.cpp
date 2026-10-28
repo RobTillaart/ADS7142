@@ -36,10 +36,43 @@ unittest_teardown()
 }
 
 
-unittest(test_constants)
+unittest(test_opmode)
 {
-  assertEqualFloat(1, 1, 0.001);
+  assertEqual( 0, MANUAL_CHANNEL0);
+  assertEqual( 4, MANUAL_AUTOSEQ);
+  assertEqual( 6, AUTOMONITOR_AUTOSEQ);
+  assertEqual( 7, HIGH_PRECISION);
 }
+
+unittest(test_input_config)
+{
+  assertEqual( 0, TWO_CHANNEL_SINGLE_END);
+  assertEqual( 1, ONE_CHANNEL_SINGLE_END);
+  assertEqual( 2, ONE_CHANNEL_DIFFERENTIAL);
+}
+
+unittest(test_error_constants)
+{
+  assertEqual(   0, ADS7142_OK);
+  assertEqual(-100, ADS7142_ERROR);
+}
+
+
+unittest(test_constructor)
+{
+  ADS7142 ads;
+
+  asserEqual(0x18, ads.getAddress());
+  asserEqual(ADS7142_OK, ads.getLastError());
+}
+
+
+unittest(test_error_calls)
+{
+  //  generate errors e.g. channel error.
+  assertEqual(1,1);
+}
+
 
 
 unittest_main()

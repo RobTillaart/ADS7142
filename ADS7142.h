@@ -56,6 +56,11 @@ public:
   void     triggerOffsetCalibration();
 
 
+  //  READ
+  uint16_t read();
+  uint8_t  read(uint16_t data[], uint8_t size);
+
+
   //  OPERATION MODE page 45
   void     setManualChannel0();
   void     setManualAutoSequencing();
@@ -89,7 +94,7 @@ public:
   //  -----------------------
   //  HIGH = 0    |  21..255
   //  LOW  = 1    |  18..255
-  void     setOscillatorClock(uint8_t osc, uint8_t clk);
+  void     setOscillatorClock(uint8_t osc, uint8_t clock);
   uint8_t  getOscillator();
   uint8_t  getClockSelect();  //  18..255
 
@@ -137,32 +142,30 @@ public:
 
   //  ALERT and BUSY
   void     setAlertPin(uint8_t alertPin);  //  sets pin
-  uint8_t  getAlert();                     //  read alert pin
+  bool     hasAlert();                     //  read alert pin
   void     setBusyPin(uint8_t busyPin);    //  sets pin
-  uint8_t  getBusy();                      //  read busy pin
+  bool     isBusy();                       //  read busy pin
 
   //  ERROR HANDLING
   int      getLastError();
 
 
-
+private:
 /////////////////////////////////////////////
 //
 //  LOW LEVEL REGISTER
 //
   int      readRegister(uint8_t reg);
   int      writeRegister(uint8_t reg, uint8_t value);
+  uint16_t readData2();
 
+  uint8_t  _address  = 0x18;
+  int      _error    = 0;
 
-private:
-  uint8_t   _address  = 0x18;
-  int       _error    = 0;
+  uint8_t  _alertPin = 0;
+  uint8_t  _busyPin  = 0;
 
-  uint8_t   _mode     = 0;
-  uint8_t   _alertPin = 0;
-  uint8_t   _busyPin  = 0;
-
-  TwoWire*  _wire;
+  TwoWire* _wire;
 };
 
 

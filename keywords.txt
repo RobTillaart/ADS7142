@@ -9,7 +9,7 @@ begin	KEYWORD2
 isConnected
 getAddress
 
-
+# TODO
 
 # Constants (LITERAL1)
 ADS7142_LIB_VERSION	LITERAL1

@@ -1,7 +1,7 @@
 //
 //    FILE: ADS7142_test
 //  AUTHOR: Rob Tillaart
-// PURPOSE: demo ADS7142
+// PURPOSE: test ADS7142 library
 //     URL: https://github.com/RobTillaart/ADS7142
 
 

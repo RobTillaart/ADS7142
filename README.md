@@ -20,10 +20,12 @@ Arduino library for I2C ADS7142 2-Channel ADC Programmable Sensor Monitor
 
 At the moment it is **work in progress**.
 
+The library is not tested with hardware (yet).
+
 This library is written based upon the datasheet of September 2017.
 
 The ADS7142 autonomously monitors signals from devices and / or sensors.
-I can provide a wake up event (typical interrupt) if the output of the 
+I can provide a wake up event (typical interrupt) if the output of the
 monitored device changes (to certain extend).
 
 The ADS7142 has two channels (ADC's) so two devices can be monitored.
@@ -46,6 +48,13 @@ The Q1 is automotive certified.
 
 ## Related
 
+ADC
+- https://github.com/RobTillaart/ADS1x15 - 4 channel
+- https://github.com/RobTillaart/ADS7142 - this library
+- https://github.com/RobTillaart/MCP_ADC - 1..8 channel ADC
+- https://github.com/semcneil/ADS7142_Arduino_Library - alternative ADS7142 library
+
+Other
 - https://nl.mouser.com/en/new/mikroe/mikroe-adc-16-click/
 - https://nl.mouser.com/en/new/texas-instruments/ti-ads7142-sensor-monitors/
 
@@ -56,7 +65,7 @@ The Q1 is automotive certified.
 
 |  Pin    |  Description  |
 |:-------:|:--------------|
-|  AVCC   |  analog supply and reference 
+|  AVCC   |  analog supply and reference
 |  AIN0   |  positive (1 channel mode) or channel 0
 |  AIN1   |  negative (1 channel mode) or channel 1
 |  ADDR   |  address selection - see **datasheet table 2** default 0x18?
@@ -64,11 +73,11 @@ The Q1 is automotive certified.
 |  ALERT  |  Alert pin, active low, connect pull up to DVDD
 |  SDA    |  I2C data
 |  SCL    |  I2C clock
-|  DVDD   |  digital IO supply 
+|  DVDD   |  digital IO supply
 |  GND    |  ground
 
-
-Note the library can only poll the ALERT and BUSY pin.
+Note the library supports polling the ALERT and BUSY pin to
+monitor the state of the device.
 
 Event driven part, e.g. wake up event is outside library scope.
 
@@ -77,7 +86,11 @@ Event driven part, e.g. wake up event is outside library scope.
 
 ### I2C Address
 
-- 8 addresses are supported 0x18..0x1F - see **datasheet table 2**
+Datasheet page 23.
+
+8 addresses are supported 0x18..0x1F, by having an explicit pull up
+or pull down resistor on the ADDR pin. See table 2.
+
 
 ### I2C Performance
 
@@ -110,9 +123,10 @@ too if they are behind the multiplexer.
 ### Constructor
 
 - **ADS7142(const uint8_t deviceAddress = 0x18, TwoWire \*wire = &Wire)** constructor
-- **bool begin()**
-- **bool isConnected()**
-- **uint8_t getAddress()**
+- **bool begin()** returns true if device address can be seen on I2C.
+- **bool isConnected()**  returns true if device address can be seen on I2C.
+- **uint8_t getAddress()** returns address set in constructor.
+
 
 ### Reset and calibration
 
@@ -120,6 +134,16 @@ Page 44.
 
 - **void reset()**
 - **void triggerOffsetCalibration()**
+
+
+### Read
+
+Before one can read() one has to check **getDataBufferCount()**
+and / or **getBusy()**.
+- **uint16_t read()** Used in manual mode to fetch a single measurement.
+- **uint8_t read(uint16_t data[], uint8_t size)** Used to fetch multple
+measurements, typical auto mode.
+
 
 ### Operation mode
 
@@ -129,8 +153,17 @@ Page 45.
 - **void setManualAutoSequencing()**
 - **void setAutoMonitoringAutoSequencing()**
 - **void setHighPrecision()**
-- **uint8_t getOperationMode()**
-- **bool getI2CHighSpeedMode()**
+- **uint8_t getOperationMode()** see table below.
+- **bool getI2CHighSpeedMode()** idem.
+
+
+|  value  |  mode                 |  notes  |
+|:-------:|:----------------------|:--------|
+|    0    |  MANUAL_CHANNEL0      |  default, single channel
+|    4    |  MANUAL_AUTOSEQ       |
+|    6    |  AUTOMONITOR_AUTOSEQ  |
+|    7    |  HIGH_PRECISION       |  16 bit (?)
+
 
 ### Input configuration
 
@@ -140,7 +173,14 @@ Page 46
 - **void setOneChannelSingleEnded()**
 - **void setOneChannelPseudoDifferential()**
 - **uint8_t getChannelConfig()**
-  
+
+|  value  |  input configuration       |  notes  |
+|:-------:|:---------------------------|:--------|
+|    0    |  TWO_CHANNEL_SINGLE_END    |
+|    1    |  ONE_CHANNEL_SINGLE_END    |
+|    2    |  ONE_CHANNEL_DIFFERENTIAL  |
+
+
 ### Auto sequence channel enable
 
 Page 47,48
@@ -155,19 +195,47 @@ Page 47,48
 
 Page 49
 
-- **void setOscillatorClock(uint8_t osc, uint8_t clk)**
+- **void setOscillatorClock(uint8_t osc, uint8_t clock)**
+See table below. If osc > 1 nothing is set.
 - **uint8_t getOscillator()**
-- **uint8_t getClockSelect()**  returns 18..255
+- **uint8_t getClockSelect()** returns 18..255 or 21..255
+depending on oscillator set
+
+|  oscillator  |  clock    |
+|:-------------|:----------|
+|  HIGH = 0    |  21..255  |
+|  LOW  = 1    |  18..255  |
+
 
 ### Data buffer control
 
 Page 50,51
 
 - **void setDataBufferMode(uint8_t mode)** mode = {0,1,4,6}
-- **uint8_t  getDataBufferMode()**
-- **void     setDataFormat(uint8_t format)** format = {0,1,2,3}
-- **uint8_t  getDataFormat()**
-- **uint8_t  getDataBufferCount()** returns 0..16
+- **uint8_t getDataBufferMode()**
+
+|  value  |  buffer mode          |  notes  |
+|:-------:|:----------------------|:--------|
+|    0    |  TODO                 |
+|    1    |  TODO                 |
+|    4    |  TODO                 |
+|    6    |  TODO                 |
+
+
+- **void setDataFormat(uint8_t format)** format = {0,1,2,3}
+- **uint8_t getDataFormat()**
+
+
+|  value  |  format               |  notes  |
+|:-------:|:----------------------|:--------|
+|    0    |  TODO                 |
+|    1    |  TODO                 |
+|    2    |  TODO                 |
+|    3    |  TODO                 |
+
+- **uint8_t getDataBufferCount()** returns 0..16, the number of
+measurements in the buffer ready to read().
+
 
 ### Accumulator control
 
@@ -179,7 +247,10 @@ Page 52,53
 - **uint16_t getAccumulatorChannel1()**
 - **uint8_t getAccumulatorCount()**
 
+
 ### Digital Window Comparator (DWC)
+
+Read the datasheet!
 
 Page 54..59
 
@@ -209,21 +280,23 @@ Page 58,59
 ### ALERT and BUSY
 
 Pins for polling the ADS7142 **ALERT** and **BUSY** pins.
-If not set these pins cannot be read.
+If these pins are not explicitly set they cannot be read
+and will always return false.
 
-- **uint8_t setAlert(uint8_t alertPin)**
-- **uint8_t getAlert()**
-- **uint8_t setBusy(uint8_t busyPin)**
-- **uint8_t getBusy()**
+- **void setAlert(uint8_t alertPin)**
+- **bool hasAlert()**
+- **void setBusy(uint8_t busyPin)**
+- **bool isBusy()**
+
 
 ## Error
 
 - **int getLastError()**
-  
-|  Value  |  Description        |  Notes  |
-|:-------:|:--------------------|:--------|
-|  0      |  ADS7142_OK         |
-|  -100   |  ADS7142_ERROR      | generic indicator
+
+|  Value  |  Description    |  Notes  |
+|:-------:|:----------------|:--------|
+|     0   |  ADS7142_OK     |
+|  -100   |  ADS7142_ERROR  | generic indicator
 
 
 ## Future
@@ -235,16 +308,23 @@ If not set these pins cannot be read.
 - add datasheet to repo
 - buy and test with hardware ADS7142.
 
-#### Should 
+#### Should
 
-- add examples.
+- extend ADS7142_test to a register test example.
+- add examples, basic first, need hardware.
+  - read manual single channel
+  - read auto sequence 0 1 0 1 etc?
+  - read buffer up to 16, count in bufferStatus
+  - auto monitoring
 - improve error handling
+- update keywords.txt?
+
 
 #### Could
 
 - unit test if possible
 - are there compatible IC's that this library can support?
-  - identical or similar interface?
+ - identical or similar interface?
 
 
 #### Won't
