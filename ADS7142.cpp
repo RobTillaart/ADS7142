@@ -597,20 +597,6 @@ uint16_t ADS7142::readData2()
 }
 
 
-uint16_t ADS7142::readData2()
-{
-  if (_wire->requestFrom(_address, (uint8_t)2) == 2)
-  {
-    uint16_t data = _wire->read() << 8;
-    data |= _wire->read();
-    return data;
-  }
-  //  TODO handle error
-  return -100;
-}
-
-
-
 //  -- END OF FILE --
 
 
