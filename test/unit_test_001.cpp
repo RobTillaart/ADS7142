@@ -63,7 +63,7 @@ unittest(test_constructor)
   ADS7142 ads;
 
   assertEqual(0x18, ads.getAddress());
-  asserEqual(ADS7142_OK, ads.getLastError());
+  assertEqual(ADS7142_OK, ads.getLastError());
 }
 
 
