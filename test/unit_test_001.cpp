@@ -54,7 +54,9 @@ unittest(test_input_config)
 unittest(test_error_constants)
 {
   assertEqual(   0, ADS7142_OK);
-  assertEqual(-100, ADS7142_ERROR);
+  assertEqual(-100, ADS7142_ERROR_GENERIC);
+  assertEqual(-101, ADS7142_ERROR_PARAMETER);
+  assertEqual(-102, ADS7142_ERROR_READ);
 }
 
 
@@ -64,6 +66,9 @@ unittest(test_constructor)
 
   assertEqual(0x18, ads.getAddress());
   assertEqual(ADS7142_OK, ads.getLastError());
+
+  assertFalse(ads.hasAlert());
+  assertFalse(ads.isBusy());
 }
 
 

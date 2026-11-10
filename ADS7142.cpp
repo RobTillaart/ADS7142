@@ -21,7 +21,11 @@ ADS7142::ADS7142(const uint8_t deviceAddress, TwoWire *wire)
 
 bool ADS7142::begin()
 {
-  if (! isConnected()) return false;
+  if (! isConnected())
+  {
+    //  error flag?
+    return false;
+  }
   return true;
 }
 
@@ -66,7 +70,11 @@ uint16_t ADS7142::read()
 
 uint8_t ADS7142::read(uint16_t data[], uint8_t size)
 {
-  if (size == 0) return 0;
+  if (size == 0)
+  {
+    _error = ADS7142_ERROR_PARAMETER;
+    return 0;
+  }
   uint8_t n = getDataBufferCount();
   if (size < n) n = size;
   //  TODO test
@@ -148,7 +156,7 @@ void ADS7142::setAutoSequenceChannel(uint8_t channel, bool enable)
 {
   if (channel > 1)
   {
-    //  _error =
+    _error = ADS7142_ERROR_PARAMETER;
     return;
   }
   uint8_t mask = readRegister(ADS7142_AUTO_SEQ_CHEN);
@@ -169,7 +177,7 @@ bool ADS7142::getAutoSequenceChannel(uint8_t channel)
 {
   if (channel > 1)
   {
-    // _error =
+    _error = ADS7142_ERROR_PARAMETER;
     return false;
   }
   uint8_t mask = readRegister(ADS7142_AUTO_SEQ_CHEN);
@@ -312,7 +320,7 @@ void ADS7142::setAlertChannel(uint8_t channel, bool enable)
 {
   if (channel > 1)
   {
-    //  _error =
+    _error = ADS7142_ERROR_PARAMETER;
     return;
   }
   uint8_t mask = readRegister(ADS7142_ALERT_CHEN);
@@ -333,7 +341,7 @@ bool ADS7142::getAlertChannel(uint8_t channel)
 {
   if (channel > 1)
   {
-    // _error =
+    _error = ADS7142_ERROR_PARAMETER;
     return false;
   }
   uint8_t mask = readRegister(ADS7142_ALERT_CHEN);
@@ -345,12 +353,12 @@ void ADS7142::setDWCThresholdHigh(uint8_t channel, uint16_t th)
 {
   if (channel > 1)
   {
-    //  _error =
+    _error = ADS7142_ERROR_PARAMETER;
     return;
   }
   if (th > 0x0FFF)
   {
-    //  _error =
+    _error = ADS7142_ERROR_PARAMETER;
     return;
   }
   uint8_t regLSB = ADS7142_DWC_HTH_CH0_LSB;
@@ -368,7 +376,7 @@ uint16_t ADS7142::getDWCThresholdHigh(uint8_t channel)
 {
   if (channel > 1)
   {
-    //  _error =
+    _error = ADS7142_ERROR_PARAMETER;
     return 0;
   }
   uint8_t regLSB = ADS7142_DWC_HTH_CH0_LSB;
@@ -388,12 +396,12 @@ void ADS7142::setDWCThresholdLow(uint8_t channel, uint16_t th)
 {
   if (channel > 1)
   {
-    //  _error =
+    _error = ADS7142_ERROR_PARAMETER;
     return;
   }
   if (th > 0x0FFF)
   {
-    //  _error =
+    _error = ADS7142_ERROR_PARAMETER;
     return;
   }
   uint8_t regLSB = ADS7142_DWC_LTH_CH0_LSB;
@@ -411,7 +419,7 @@ uint16_t ADS7142::getDWCThresholdLow(uint8_t channel)
 {
   if (channel > 1)
   {
-    //  _error =
+    _error = ADS7142_ERROR_PARAMETER;
     return 0;
   }
   uint8_t regLSB = ADS7142_DWC_LTH_CH0_LSB;
@@ -431,12 +439,12 @@ void ADS7142::setDWXHysteresis(uint8_t channel, uint8_t hysteresis)
 {
   if (channel > 1)
   {
-    //  _error =
-    return;
+    _error = ADS7142_ERROR_PARAMETER;
+    return;  //  false?
   }
   if (hysteresis > 0x3F)
   {
-    //  _error =
+    _error = ADS7142_ERROR_PARAMETER;
     return;
   }
   uint8_t regHys = ADS7142_DWC_HYS_CH0;
@@ -451,7 +459,7 @@ uint8_t ADS7142::getDWXHysteresis(uint8_t channel)
 {
   if (channel > 1)
   {
-    //  _error =
+    _error = ADS7142_ERROR_PARAMETER;
     return 0;
   }
   uint8_t regHys = ADS7142_DWC_HYS_CH0;
@@ -471,7 +479,7 @@ void ADS7142::setMaxEventCount(uint8_t count)
 {
   if (count > 15)
   {
-    //  _error =
+    _error = ADS7142_ERROR_PARAMETER;
     return;
   }
   writeRegister(ADS7142_PRE_ALT_MAX_EVENT_COUNT, count << 4);
@@ -563,14 +571,18 @@ int ADS7142::readRegister(uint8_t reg)
 {
   _wire->beginTransmission(_address);
   _wire->write(reg);
-  _wire->endTransmission();   //  TODO handle error
-
+  _error = _wire->endTransmission();
+  if (_error != ADS7142_OK)
+  {
+    return _error;
+  }
   if (_wire->requestFrom(_address, (uint8_t)1) == 1)
   {
+    _error = ADS7142_OK;
     return _wire->read();
   }
-  //  TODO handle error
-  return ADS7142_ERROR;
+  _error = ADS7142_ERROR_READ;
+  return _error;
 }
 
 
@@ -588,12 +600,13 @@ uint16_t ADS7142::readData2()
 {
   if (_wire->requestFrom(_address, (uint8_t)2) == 2)
   {
+    _error = ADS7142_OK;
     uint16_t data = _wire->read() << 8;
     data |= _wire->read();
     return data;
   }
-  //  TODO handle error
-  return -100;
+  _error = ADS7142_ERROR_READ;
+  return _error;
 }
 
 

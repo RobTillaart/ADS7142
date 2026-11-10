@@ -1,6 +1,6 @@
 #pragma once
 //
-//    FILE: ADS7124.h
+//    FILE: ADS7142.h
 //  AUTHOR: Rob Tillaart
 // VERSION: 0.1.0
 //    DATE: 2022-12-02
@@ -19,8 +19,10 @@
 
 
 //  ERROR CODES
-#define ADS7142_OK         0
-#define ADS7142_ERROR      -100
+const int ADS7142_OK              = 0;
+const int ADS7142_ERROR_GENERIC   = -100;
+const int ADS7142_ERROR_PARAMETER = -101;
+const int ADS7142_ERROR_READ      = -102;
 
 
 //  OPERATION MODES

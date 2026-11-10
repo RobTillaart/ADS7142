@@ -1,7 +1,7 @@
 {
   "name": "ADS7142",
   "keywords": "ADS7142, ADS7142-Q1",
-  "description": "Arduino library for I2C ADS7124 2-Channel ADC Programmable Sensor Monitor.",
+  "description": "Arduino library for I2C ADS7142 2-Channel ADC Programmable Sensor Monitor.",
   "authors":
   [
     {

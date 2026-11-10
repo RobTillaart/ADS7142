@@ -1,14 +1,14 @@
 #pragma once
 //
-//    FILE: ADS7124_registers.h
+//    FILE: ADS7142_registers.h
 //  AUTHOR: Rob Tillaart
 // VERSION: 0.1.0
 //    DATE: 2022-12-02
 // PURPOSE: Arduino library for I2C ADS7142 dual ADC Sensor Monitor
-//     URL: https://github.com/RobTillaart/ADS7124
+//     URL: https://github.com/RobTillaart/ADS7142
 
 
-//////////////////////////////////////
+///////////////////////////////////////////////////////
 //
 //  REGISTERS Table 5. Register Map  page 43
 //
