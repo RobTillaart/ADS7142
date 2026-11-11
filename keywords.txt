@@ -1,0 +1,91 @@
+# Syntax Colouring Map For ADS7142
+
+# Data types (KEYWORD1)
+ADS7142	KEYWORD1
+
+
+# Methods and Functions (KEYWORD2)
+begin	KEYWORD2
+isConnected	KEYWORD2
+getAddress	KEYWORD2
+
+reset	KEYWORD2
+triggerOffsetCalibration	KEYWORD2
+
+read	KEYWORD2
+
+setManualChannel0	KEYWORD2
+setManualAutoSequencing	KEYWORD2
+setAutoMonitoringAutoSequencing	KEYWORD2
+setHighPrecision	KEYWORD2
+
+getOperationMode	KEYWORD2
+getI2CHighSpeedMode	KEYWORD2
+
+
+setTwoChannelSingleEnded	KEYWORD2
+setOneChannelSingleEnded	KEYWORD2
+setOneChannelPseudoDifferential	KEYWORD2
+getChannelConfig	KEYWORD2
+
+setAutoSequenceChannel	KEYWORD2
+getAutoSequenceChannel	KEYWORD2
+startSequence	KEYWORD2
+stopSequence	KEYWORD2
+getSequenceStatus	KEYWORD2
+
+setOscillatorClock	KEYWORD2
+getOscillator	KEYWORD2
+getClockSelect	KEYWORD2
+
+setDataBufferMode	KEYWORD2
+getDataBufferMode	KEYWORD2
+setDataFormat	KEYWORD2
+getDataFormat	KEYWORD2
+getDataBufferCount	KEYWORD2
+
+setAccumulatorEnable	KEYWORD2
+getAccumulatorEnable	KEYWORD2
+getAccumulatorChannel0	KEYWORD2
+getAccumulatorChannel1	KEYWORD2
+getAccumulatorCount	KEYWORD2
+
+setDWCEnable	KEYWORD2
+getDWCEnable	KEYWORD2
+setAlertChannel	KEYWORD2
+getAlertChannel	KEYWORD2
+
+setDWCThresholdHigh	KEYWORD2
+getDWCThresholdHigh	KEYWORD2
+setDWCThresholdLow	KEYWORD2
+getDWCThresholdLow	KEYWORD2
+setDWXHysteresis	KEYWORD2
+getDWXHysteresis	KEYWORD2
+
+setMaxEventCount	KEYWORD2
+getMaxEventCount	KEYWORD2
+getAlertTriggerChannel	KEYWORD2
+clearAlertLow	KEYWORD2
+getAlertLow	KEYWORD2
+clearAlertHigh	KEYWORD2
+getAlertHigh	KEYWORD2
+
+setAlertPin	KEYWORD2
+hasAlert	KEYWORD2
+setBusyPin	KEYWORD2
+isBusy	KEYWORD2
+
+getLastError	KEYWORD2
+
+
+# Constants (LITERAL1)
+ADS7142_LIB_VERSION	LITERAL1
+
+MANUAL_CHANNEL0	LITERAL1
+MANUAL_AUTOSEQ	LITERAL1
+AUTOMONITOR_AUTOSEQ	LITERAL1
+HIGH_PRECISION	LITERAL1
+
+TWO_CHANNEL_SINGLE_END	LITERAL1
+ONE_CHANNEL_SINGLE_END	LITERAL1
+ONE_CHANNEL_DIFFERENTIAL	LITERAL1
