@@ -34,7 +34,7 @@ void setup()
 void loop()
 {
   //  fetch in pairs.
-  if (getDataBufferCount() >= 2)
+  if (ads.getDataBufferCount() >= 2)
   {
     uint16_t value[2]
     ads.read(value, 2);

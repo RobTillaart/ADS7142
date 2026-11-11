@@ -33,7 +33,7 @@ void setup()
 
 void loop()
 {
-  uint8_t n = getDataBufferCount();
+  uint8_t n = ads.getDataBufferCount();
   for (int i = 0; i < n; i++)
   {
     uint16_t value = ads.read();
