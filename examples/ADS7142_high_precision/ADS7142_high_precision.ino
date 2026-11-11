@@ -23,11 +23,11 @@ void setup()
   Serial.println();
 
   Wire.begin();
-  
+
   ads.begin();
   //  set mode
   ads.setHighPrecision();
-  ads.setDataFormat(ADD_ZERO);
+  ads.setDataFormat(ADD_ZEROS);
 }
 
 
@@ -36,7 +36,7 @@ void loop()
   //  fetch in pairs.
   if (getDataBufferCount() >= 2)
   {
-    uint16_t value[2] 
+    uint16_t value[2]
     ads.read(value, 2);
     Serial.print(0);
     Serial.print('\t');

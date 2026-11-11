@@ -27,7 +27,7 @@ void setup()
   ads.begin();
   //  set manual mode, no channel ID or valid bit.
   ads.setManualChannel0();
-  ads.setDataFormat(ADD_ZERO);  //  explicit (is default).
+  ads.setDataFormat(ADD_ZEROS);  //  explicit (is default).
 }
 
 

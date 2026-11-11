@@ -23,7 +23,7 @@ void setup()
   Serial.println();
 
   Wire.begin();
-  
+
   ads.begin();
   //  set auto monitoring and auto sequence
   ads.setAutoMonitoringAutoSequencing();
