@@ -25,8 +25,9 @@ void setup()
   Wire.begin();
 
   ads.begin();
-  //  set manual mode
+  //  set manual mode, no channel ID or valid bit.
   ads.setManualChannel0();
+  ads.setDataFormat(ADD_ZERO);  //  explicit (is default).
 }
 
 

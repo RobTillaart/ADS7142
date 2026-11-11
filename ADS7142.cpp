@@ -236,10 +236,12 @@ uint8_t ADS7142::getClockSelect()
 //
 void ADS7142::setDataBufferMode(uint8_t mode)
 {
-  if (mode == 0 ||  mode == 1 || mode == 4 || mode == 6)
+  if (mode > 7 ||  mode == 2  || mode == 3)
   {
-    writeRegister(ADS7142_DATA_BUFFER_OPMODE, mode);
+    _error = ADS7142_ERROR_PARAMETER;
+    return;
   }
+  writeRegister(ADS7142_DATA_BUFFER_OPMODE, mode);
 }
 
 uint8_t ADS7142::getDataBufferMode()
@@ -249,7 +251,11 @@ uint8_t ADS7142::getDataBufferMode()
 
 void ADS7142::setDataFormat(uint8_t format)
 {
-  if (format > 3) return;
+  if (format > 3)
+  {
+    _error = ADS7142_ERROR_PARAMETER;
+    return;
+  }
   writeRegister(ADS7142_DOUT_FORMAT_CFG, format);
 }
 

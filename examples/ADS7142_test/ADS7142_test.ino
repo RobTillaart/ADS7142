@@ -23,14 +23,21 @@ void setup()
   Serial.println();
 
   Wire.begin();
-  
+
   ads.begin();
+  //  set manual mode, no channel ID or valid bit.
+  ads.setManualChannel0();
+  ads.setDataFormat(ADD_ZERO);  //  explicit (is default).
 }
 
 
 void loop()
 {
+  uint16_t value = ads.read();
+  Serial.println(value);
+  delay(1000);
 }
+
 
 
 //  -- END OF FILE --

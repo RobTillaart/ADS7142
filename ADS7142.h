@@ -25,8 +25,7 @@ const int ADS7142_ERROR_PARAMETER = -101;
 const int ADS7142_ERROR_READ      = -102;
 
 
-//  OPERATION MODES
-enum OPMODE
+enum operational_mode
 {
   MANUAL_CHANNEL0     = 0,
   MANUAL_AUTOSEQ      = 4,
@@ -34,12 +33,27 @@ enum OPMODE
   HIGH_PRECISION      = 7
 };
 
-//  INPUT CONFIGURATION
-enum CONFIG
+enum input_configuration
 {
   TWO_CHANNEL_SINGLE_END   = 0,
   ONE_CHANNEL_SINGLE_END   = 1,
   ONE_CHANNEL_DIFFERENTIAL = 2
+};
+
+enum data_buffer_mode
+{
+  STOP_BURST_MODE      = 0,
+  START_BURST_MODE     = 1,
+  PRE_ALERT_DATA_MODE  = 4,
+  POST_ALERT_DATA_MODE = 6
+};
+
+enum data_format
+{
+  ADD_ZEROS             = 0,  //  default
+  ADD_CHANNEL           = 1,
+  ADD_CHANNEL_VALID_BIT = 2,
+  ADD_ZEROS_2           = 3
 };
 
 

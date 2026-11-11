@@ -36,7 +36,15 @@ unittest_teardown()
 }
 
 
-unittest(test_opmode)
+unittest(test_error_constants)
+{
+  assertEqual(   0, ADS7142_OK);
+  assertEqual(-100, ADS7142_ERROR_GENERIC);
+  assertEqual(-101, ADS7142_ERROR_PARAMETER);
+  assertEqual(-102, ADS7142_ERROR_READ);
+}
+
+unittest(test_operational_mode)
 {
   assertEqual( 0, MANUAL_CHANNEL0);
   assertEqual( 4, MANUAL_AUTOSEQ);
@@ -44,19 +52,27 @@ unittest(test_opmode)
   assertEqual( 7, HIGH_PRECISION);
 }
 
-unittest(test_input_config)
+unittest(test_input_configuration)
 {
   assertEqual( 0, TWO_CHANNEL_SINGLE_END);
   assertEqual( 1, ONE_CHANNEL_SINGLE_END);
   assertEqual( 2, ONE_CHANNEL_DIFFERENTIAL);
 }
 
-unittest(test_error_constants)
+unittest(test_data_buffer_mode)
 {
-  assertEqual(   0, ADS7142_OK);
-  assertEqual(-100, ADS7142_ERROR_GENERIC);
-  assertEqual(-101, ADS7142_ERROR_PARAMETER);
-  assertEqual(-102, ADS7142_ERROR_READ);
+  assertEqual( 0, STOP_BURST_MODE);
+  assertEqual( 1, START_BURST_MODE);
+  assertEqual( 4, PRE_ALERT_DATA_MODE);
+  assertEqual( 6, POST_ALERT_DATA_MODE);
+}
+
+unittest(test_data_format)
+{
+  assertEqual( 0, ADD_ZEROS);
+  assertEqual( 1, ADD_CHANNEL);
+  assertEqual( 2, ADD_CHANNEL_VALID_BIT);
+  assertEqual( 3, ADD_ZEROS_2);
 }
 
 

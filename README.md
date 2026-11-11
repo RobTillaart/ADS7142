@@ -20,9 +20,10 @@ Arduino library for I2C ADS7142 2-Channel ADC Programmable Sensor Monitor
 
 At the moment it is **work in progress**.
 
-The library is not tested with hardware (yet).
+The library is NOT tested with hardware (yet).
 
 This library is written based upon the datasheet of September 2017.
+Read the datasheet to understand the details.
 
 The ADS7142 autonomously monitors signals from devices and / or sensors.
 I can provide a wake up event (typical interrupt) if the output of the
@@ -36,6 +37,7 @@ The trigger con be configured by means of thresholds (HIGH / LOW) or an event Co
 
 Note: the ADS7142 operates at 1.65 - 3.6 Volts, so it cannot be used directly
 by a 5 Volt MCU. Use a voltage or level convertor if needed.
+
 
 Feedback as always is welcome.
 
@@ -94,7 +96,7 @@ or pull down resistor on the ADDR pin. See table 2.
 
 ### I2C Performance
 
-- speed up to 3.4 MHz (High speed I2C)
+- speed up to 3.4 MHz (High speed I2C).
 
 ### I2C multiplexing
 
@@ -140,6 +142,7 @@ Page 44.
 
 Before one can read() one has to check **getDataBufferCount()**
 and / or **getBusy()**.
+
 - **uint16_t read()** Used in manual mode to fetch a single measurement.
 - **uint8_t read(uint16_t data[], uint8_t size)** Used to fetch multple
 measurements, typical auto mode.
@@ -216,22 +219,24 @@ Page 50,51
 
 |  value  |  buffer mode          |  notes  |
 |:-------:|:----------------------|:--------|
-|    0    |  TODO                 |
-|    1    |  TODO                 |
-|    4    |  TODO                 |
-|    6    |  TODO                 |
+|    0    |  STOP_BURST_MODE      |
+|    1    |  START_BURST_MODE     |  default
+|    4    |  PRE_ALERT_DATA_MODE  |
+|    6    |  POST_ALERT_DATA_MODE |
+|  other  |  reserved             |
 
 
 - **void setDataFormat(uint8_t format)** format = {0,1,2,3}
 - **uint8_t getDataFormat()**
 
+|  value  |  format                    |  notes  |
+|:-------:|:---------------------------|:--------|
+|    0    |  ADD_ZEROS                 |  default
+|    1    |  ADD_CHANNEL_ID            |
+|    2    |  ADD_CHANNEL_ID_VALID_BIT  |
+|    3    |  ADD_ZEROS_2               |  same as 0
+|  other  |  reserved                  |
 
-|  value  |  format               |  notes  |
-|:-------:|:----------------------|:--------|
-|    0    |  TODO                 |
-|    1    |  TODO                 |
-|    2    |  TODO                 |
-|    3    |  TODO                 |
 
 - **uint8_t getDataBufferCount()** returns 0..16, the number of
 measurements in the buffer ready to read().
@@ -293,10 +298,13 @@ and will always return false.
 
 - **int getLastError()**
 
-|  Value  |  Description    |  Notes  |
-|:-------:|:----------------|:--------|
-|     0   |  ADS7142_OK     |
-|  -100   |  ADS7142_ERROR  | generic indicator
+|  Value  |  Description              |  Notes  |
+|:-------:|:--------------------------|:--------|
+|     0   |  ADS7142_OK               |
+|  -100   |  ADS7142_ERROR_GENERIC    |
+|  -101   |  ADS7142_ERROR_PARAMETER  |  out of range
+|  -103   |  ADS7142_ERROR_READ       |  low level I2C
+|  other  |  mostly I2C write errors  |
 
 
 ## Future
@@ -317,8 +325,9 @@ and will always return false.
   - read buffer up to 16, count in bufferStatus
   - auto monitoring
 - improve error handling
-- update keywords.txt?
-
+- add return values to check success
+  - void => int / bool + error flag
+- parameters => enum type where possible
 
 #### Could
 
