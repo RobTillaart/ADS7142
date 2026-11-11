@@ -36,7 +36,7 @@ void loop()
   //  fetch in pairs.
   if (ads.getDataBufferCount() >= 2)
   {
-    uint16_t value[2]
+    uint16_t value[2];
     ads.read(value, 2);
     Serial.print(0);
     Serial.print('\t');
